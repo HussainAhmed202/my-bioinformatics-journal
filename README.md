@@ -1,2 +1,2 @@
 # my-bioinformatics-journal
-Documenting my learning of bioinformatics 
+Hello future me. I have created this repo to document my learning of bioinformatics. I have just started learning it and I am fascinated. I am currently enrolled in my final year at NED University Pakistan and I hope to pursue a career in bioinformatics. I will be using this repo to upload content in a form of handwritten notes, algorithm implementations or whatever stuff I find interesting on the way.
