@@ -1,0 +1,38 @@
+"""
+    Working
+    lets say k=2 m=2 n=2
+
+    P(AA,AA) = 2/6*1/5   [Homozygous Dominant]
+
+    P(AA,Aa) = 2{2/6*2/5}   [Heterozygous Dominant]
+    P(AA,aa) = 2{2/6*2/5}   [Heterozygous Dominant]
+
+    P(Aa,Aa) = 2*(3/4)*{2/6*2/5}   [Heterozygous Dominant]
+    P(Aa,aa) = 2*(1/2)*{2/6*2/5}   [Heterozygous Dominant]
+
+    Not needed as we are only looking for pairs that produce dominent allele
+    P(aa,aa) = {2/6*1/5}   [Homozygous Recessive]
+
+    """
+
+if __name__ == "__main__":
+    #filename = "../rosalind_iprb.txt"
+    with open(filename) as f:
+        k, m, n = list(map(int, f.readline().strip().split()))
+
+    total = k + m + n
+
+    # prob of homozygous dominant
+    prob_homo_dom = (k / total) * ((k - 1) / (total - 1))
+
+    # prob of heterozygous dominant
+    # cases = [(AA,Aa),(Aa,AA)] + [(AA,aa),(aa,AA)] + (Aa,Aa),  [(Aa,aa),(aa,Aa)]
+    prob_AA_Aa = 2 * ((k / total) * (m / (total - 1)))
+    prob_AA_aa = 2 * ((k / total) * (n / (total - 1)))
+    prob_Aa_Aa = 3 / 4 * ((m / total) * ((m - 1) / (total - 1)))
+    prob_Aa_aa = 2 * 1 / 2 * ((m / total) * (n / (total - 1)))
+
+    prob_hetro_dom = prob_AA_Aa + prob_AA_aa + prob_Aa_Aa + prob_Aa_aa
+    prob_dom = prob_homo_dom + prob_hetro_dom
+
+    print(prob_dom)
