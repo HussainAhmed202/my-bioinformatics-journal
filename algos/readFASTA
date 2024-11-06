@@ -1,0 +1,26 @@
+def readFASTA(filepath) -> list[str]:
+    header_indices = []
+    seq_start_indices = []
+    seqs = []
+    headers = []
+
+    with open(filepath) as rf:
+        data = list(map(str.strip, rf.readlines()))
+
+    for index in range(len(data)):
+        if data[index].startswith(">"):
+            header_indices.append(index)
+            seq_start_indices.append(index + 1)
+
+    for i in range(len(header_indices)):
+        try:
+            seq = data[seq_start_indices[i] : header_indices[i + 1]]
+        except IndexError:
+            seq = data[seq_start_indices[i] :]
+        finally:
+            seq = "".join(seq)
+            seqs.append(seq)
+
+    for header_index in header_indices:
+        headers.append(data[header_index][1:])
+    return headers, seqs
