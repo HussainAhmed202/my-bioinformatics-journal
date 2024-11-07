@@ -1,0 +1,105 @@
+from math import comb
+
+"""
+Mendel's first law states that if we cross two Aa organisms, 
+then 1/4 of their offspring will be aa, 1/4 will be AA, 
+and 1/2 will be Aa. 
+
+    A   a
+   _________
+A |  AA  Aa
+a |  aA  aa
+
+
+Now, say that we cross plants that are both heterozygous for two factors,
+so that both of their genotypes may be written as Aa Bb. 
+
+Mendel's second law states that the same proportions of AA, Aa, and aa 
+individuals will be observed in these offspring. 
+The same fact holds for BB and bb offspring.
+
+As a result, independence will allow us to say that the probability 
+of an aa BB offspring is simply equal to the probability of 
+an aa offspring times the probability of a BB organism, 
+
+i.e.
+prob(aa BB) = prob(aa) * prob(BB)
+            = 1/4 * 1/4 
+            = 1/16.
+
+
+Generations
+1 2 4 8 16 32 ...
+
+N = 2^k
+prob(Aa Bb) = 1/2*1/2 = 1/4
+
+NCr*p^r*q^(n-r)
+
+p = 1/4
+q = 1-1/4 = 3/4
+
+
+Let X be a random variable that counts the number of Aa Bb organisms in the k-th gen.
+prob(X >= N) = 1 - prob(X < N)
+
+if k = 3rd gen
+
+0 1 2 3
+1 2 4 8
+so there are in total 8 people in that gen
+
+lets say N=3
+
+prob(X<3) = prob(X=0) + prob(X=1) + prob(X=2)
+
+
+prob(X=x) = (nCx).p**x.q**(n-x) where q = 1-p n = 2^k
+p = 1/4
+
+for k = 2 and x = 1
+n = 2**2 = 4
+prob(X>=1) = 1 - prob(X<1)
+           = 1 - prob(X=0)
+           = 1 - {4C0.p^0.q^4-0}
+           = 0.684
+"""
+
+
+def binomial_dist(total_count, choose_count, prob_of_success):
+    """
+    Computes the bionomial distribution for the given arguments
+    prob(X=x) = (nCx).prob_of_success**x.q**(total_ccountx)choose_count
+
+    """
+    nCx = comb(total_count, choose_count)
+
+    p_x = prob_of_success**choose_count
+
+    q_n_x = (1 - prob_of_success) ** (total_count - choose_count)
+
+    return nCx * p_x * q_n_x
+
+
+if __name__ == "__main__":
+    filename = "../rosalind_lia.txt"
+    with open(filename) as f:
+        k, N = list(map(int, f.read().strip().split()))
+
+    # using Mendel's first law of segregation
+    prob_of_Aa = 1 / 2
+    prob_of_Bb = 1 / 2
+
+    # using Mendel's second law of independence
+    prob_of_AaBb = prob_of_Aa * prob_of_Bb
+
+    # total people in the k-th generation
+    total_count = 2**k
+
+    # prob(X>=N) = 1 - prob(X<N)
+    prob = 0
+    for x in range(N):
+        prob += binomial_dist(total_count, x, prob_of_success=prob_of_AaBb)
+    prob = 1 - prob
+
+    print(round(prob, 3))
