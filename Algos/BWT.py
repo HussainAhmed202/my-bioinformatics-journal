@@ -60,3 +60,15 @@ if __name__ == "__main__":
         t = bwt[i] + t
         i = obj.left_walk(i, bwt[i])
     print("Original String: ", t)
+
+    query_seq = "aac"
+    top = 0
+    bottom = len(input_string)
+    for query_char in query_seq[::-1]:
+        top = obj.left_walk(top, query_char)
+        bottom = obj.left_walk(bottom, query_char)
+
+    print("Top: ", top)
+    print("Bottom: ", bottom)
+
+    print()
