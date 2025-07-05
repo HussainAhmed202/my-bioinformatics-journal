@@ -1,29 +1,62 @@
-def burrows_wheelers_transform(s):
-    BWT: str = ""
-    bwm, rotations, rotation = [], [], []
+class BurrowsWheel:
+    def __init__(self, sequence):
+        self.sequence = sequence
+        self.bwt = ""
 
-    for i in range(len(s)):
-        rotation = s[i:] + s[:i]
-        rotations.append(rotation)
+    def __occ(self, symbol):
+        i = 0
+        for char in self.bwt:
+            if char < symbol:
+                i += 1
+        return i
 
-    rotations = sorted(rotations)
+    def __counts(self, position, symbol):
+        i = 0
+        for j in range(position):
+            if self.bwt[j] == symbol:
+                i += 1
+        return i
 
-    bwm = [rotation for rotation in rotations]
-    for i in bwm:
-        BWT += i[-1]
+    def left_walk(self, position, symbol):
+        return self.__occ(symbol) + self.__counts(position, symbol)
 
-    return BWT, bwm
+    def burrows_wheelers_transform(self):
+        bwm, rotations, rotation = [], [], []
+
+        for i in range(len(self.sequence)):
+            rotation = self.sequence[i:] + self.sequence[:i]
+            rotations.append(rotation)
+
+        rotations = sorted(rotations)
+        bwm = [rotation for rotation in rotations]
+        for i in bwm:
+            self.bwt += i[-1]
+        return self.bwt
 
 
 if __name__ == "__main__":
     # Example usage:
     input_string = "acaacg$"
-    bwt, bwm = burrows_wheelers_transform(input_string)
-
-    # Print all rotations
-    print("------------------------Rotations:---------------------")
-    for i in bwm:
-        print(i)
+    obj = BurrowsWheel(input_string)
 
     # Print BWT
-    print("------------------------BWT:----------------------\n", bwt)
+    print("------------------------BWT:----------------------")
+    bwt = obj.burrows_wheelers_transform()
+    print(bwt)
+
+    # Get mapping
+    i = obj.left_walk(6, "c")
+    print("Mapping: ", i)
+
+    i = obj.left_walk(4, "a")
+    print("Mapping: ", i)
+
+    i = obj.left_walk(0, "g")
+    print("Mapping: ", i)
+
+    i = 0
+    t = ""
+    while bwt[i] != "$":
+        t = bwt[i] + t
+        i = obj.left_walk(i, bwt[i])
+    print("Original String: ", t)
